@@ -1,0 +1,68 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.enwerevincent'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+ext{
+    repoHome = System.getenv()['LIB_LOCAL_REPO']
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    maven{
+        url = "${repoHome}"
+    }
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2021.0.5")
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-config
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: '4.0.1'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.5.6'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.6.8'
+    implementation 'org.springframework.security:spring-security-jwt'
+    implementation 'com.nimbusds:nimbus-jose-jwt:9.25.6'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'com.enwerevincent.invest:iw-commons-resources:1.0'
+    implementation 'javax.xml.bind:jaxb-api:2.3.0'
+//    implementation project(path: ':iw-commons-resources')
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
